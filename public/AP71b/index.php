@@ -10,19 +10,15 @@
         <?php
             require_once 'autoload.php';
             echo "<h1>Hello, Welcome DAW Student!</h1>";
-            $connection = new Connection();
-            //Consulta de datos
-            $query = 'SELECT * From Person';
-            $stmt = $connection->getConn()->query($query);
+            $gestor = new GestorPDO();
 
             echo '<table class="table table-striped">';
             echo '<thead><tr><th>id</th><th>name</th></tr></thead>';
-            while ($value = $stmt->fetch(PDO::FETCH_ASSOC)){
-                echo '<tr>';
-                foreach ($value as $element){
-                    echo '<td>' . $element . '</td>';
-                }
-
+            //Consulta de datos
+            $arrayPersonas = $gestor->listar();
+            foreach ($arrayPersonas as $persona) {
+                echo '<td>' . $persona->getId() . '</td>';
+                echo '<td>' . $persona->getNombre() . '</td>';
                 echo '</tr>';
             }
             echo '</table>';
