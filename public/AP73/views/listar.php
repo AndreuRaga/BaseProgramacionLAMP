@@ -7,10 +7,17 @@
 </head>
 <body>
     <h1>Proyecto: Sistema de Gestión de Flota de Vehículos</h1>
+    <div style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px;">
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <p>Bienvenido, <b><?= $_SESSION['usuario_email'] ?></b> | <a href="index.php?accion=logout">Cerrar sesión</a></p>
+        <?php else: ?>
+            <p><a href="index.php?accion=login">Iniciar sesión</a> | <a href="index.php?accion=alta">Registrarse</a></p>
+        <?php endif; ?>
+    </div>
+    
     <h2>Listado de vehículos</h2>
     <a href="index.php?accion=agregar">Agregar vehículo</a>
-    <a href="index.php?accion=alta">Registrarse</a>
-    <a href="index.php?accion=login">Iniciar sesión</a>
+    
 
     <div class="container-fluid">
         <table class="table table-striped">
