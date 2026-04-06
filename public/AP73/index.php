@@ -2,33 +2,44 @@
     require_once 'autoload.php';
     
     $gestor = new GestorPDO();
-    $controller = new ControllerVehiculo($gestor);
+    $controllerVehiculo = new ControllerVehiculo($gestor);
+    $controllerUsuario = new ControllerUsuario($gestor);
 
     $accion = $_GET['accion'] ?? 'index';
 
     switch ($accion) {
         //Gestión de usuarios
         case 'login':
-            $controller->login();
+            $controllerUsuario->login();
             break;
         case 'alta':
-            $controller->alta();
+            $controllerUsuario->alta();
             break;
         case 'logout':
-            $controller->logout();
+            $controllerUsuario->logout();
             break;
-        //Gestión de vehículos
-        case 'editar':
-            $controller->editar();
-            break;
-        case 'eliminar':
-            $controller->eliminar();
-            break;
+        //Gestión de vehículos. Técnica fall-through
         case 'agregar':
-            $controller->agregar();
-            break;
+        case 'editar':
+        case 'eliminar': 
+            if (!isset($_SESSION['usuario_id'])) {
+                header('Location: index.php?accion=login');
+                exit();
+            }
+            //Si está autenticado, dejamos que ejecute la acción
+            switch ($accion) {
+                case 'agregar':
+                    $controllerVehiculo->agregar();
+                    break;
+                case 'editar':
+                    $controllerVehiculo->editar();
+                    break;
+                case 'eliminar':
+                    $controllerVehiculo->eliminar();
+                    break;
+            }
         default:
-            $controller->index();
+            $controllerVehiculo->index();
             break;
     }
 ?>

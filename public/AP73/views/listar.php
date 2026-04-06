@@ -9,6 +9,7 @@
     <h1>Proyecto: Sistema de Gestión de Flota de Vehículos</h1>
     <h2>Listado de vehículos</h2>
     <a href="index.php?accion=agregar">Agregar vehículo</a>
+    <a href="index.php?accion=alta">Registrarse</a>
 
     <div class="container-fluid">
         <table class="table table-striped">

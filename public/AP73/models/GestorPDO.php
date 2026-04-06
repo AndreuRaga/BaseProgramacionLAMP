@@ -93,4 +93,20 @@ class GestorPDO extends Connection {
         }
         return $stmt->execute();
     }
+
+    //Gestión de usuarios
+    public function registrarUsuario(Usuario $usuario) {
+        try {
+            $sql = "INSERT INTO Usuario (email, password) VALUES (:email, :password)";
+            $stmt = $this->getConn()->prepare($sql);
+            
+            //Usamos los getters del objeto Usuario
+            $stmt->bindValue(':email', $usuario->getEmail());
+            $stmt->bindValue(':password', $usuario->getPassword());
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage() . $e->getCode();
+        }
+    }
 }
