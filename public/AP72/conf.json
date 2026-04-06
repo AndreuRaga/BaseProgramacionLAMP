@@ -2,5 +2,5 @@
     "host": "db",
     "userName": "root",
     "password": "test",
-    "db": "ap72"
+    "db": "rentAcar"
 }
