@@ -1,6 +1,6 @@
 <?php
 
-class Controller {
+class ControllerVehiculo {
     protected $gestor;
 
     public function __construct($gestor) {
