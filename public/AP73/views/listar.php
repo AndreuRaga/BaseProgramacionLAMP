@@ -14,7 +14,7 @@
             <p><a href="index.php?accion=login">Iniciar sesión</a> | <a href="index.php?accion=alta">Registrarse</a></p>
         <?php endif; ?>
     </div>
-    
+
     <h2>Listado de vehículos</h2>
     <a href="index.php?accion=agregar">Agregar vehículo</a>
     
@@ -33,7 +33,9 @@
                     <th>Tipo de combustible</th>
                     <th>Cilindrada</th>
                     <th>¿Incluye casco?</th>
-                    <th>Opciones</th>
+                    <?php if (isset($_SESSION['usuario_id'])): ?>
+                        <th>Opciones</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -66,48 +68,50 @@
                             echo '<td>' . 'N/A' . '</td>';
                         }
                         ?>
-                        <td>
-                            <form action="index.php?accion=editar" method="post" style="display:inline;">
-                                <input type="hidden" name="id" value="<?=$vehiculo->getId()?>">
-                                <input type="hidden" name="tipoVehiculo" value="<?= get_class($vehiculo) ?>">
-                                <label>Marca:</label>
-                                <input type="text" name="marca" value="<?=$vehiculo->getMarca()?>" required>
+                        <?php if (isset($_SESSION['usuario_id'])): ?>
+                            <td>
+                                <form action="index.php?accion=editar" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?=$vehiculo->getId()?>">
+                                    <input type="hidden" name="tipoVehiculo" value="<?= get_class($vehiculo) ?>">
+                                    <label>Marca:</label>
+                                    <input type="text" name="marca" value="<?=$vehiculo->getMarca()?>" required>
 
-                                <label>Modelo:</label>
-                                <input type="text" name="modelo" value="<?=$vehiculo->getModelo()?>" required>
+                                    <label>Modelo:</label>
+                                    <input type="text" name="modelo" value="<?=$vehiculo->getModelo()?>" required>
+                                    
+                                    <label>Matrícula:</label>
+                                    <input type="text" name="matricula" value="<?=$vehiculo->getMatricula()?>" required>
+                                    
+                                    <label>Precio por día:</label>
+                                    <input type="number" name="precioDia" step="0.01" value="<?=$vehiculo->getPrecioDia()?>" required>
+                                    
+                                    <?php if ($vehiculo instanceof Coche): ?>
+                                    <label>Número de puertas:</label>
+                                    <input type="number" name="numeroPuertas" value="<?=$vehiculo->getNumeroPuertas()?>">
+                                    
+                                    <label for="tipoCombustible">Tipo de combustible:</label>
+                                    <select id="tipoCombustible" name="tipoCombustible" >
+                                        <option value="Diésel" <?= $vehiculo->getTipoCombustible() === 'Diésel' ? 'selected' : '' ?>>Diésel</option>
+                                        <option value="Gasolina" <?= $vehiculo->getTipoCombustible() === 'Gasolina' ? 'selected' : '' ?>>Gasolina</option>
+                                        <option value="Eléctrico" <?= $vehiculo->getTipoCombustible() === 'Eléctrico' ? 'selected' : '' ?>>Eléctrico</option>
+                                        <option value="Híbrido" <?= $vehiculo->getTipoCombustible() === 'Híbrido' ? 'selected' : '' ?>>Híbrido</option>
+                                    </select>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($vehiculo instanceof Motocicleta): ?>
+                                    <label>Cilindrada:</label>
+                                    <input type="number" name="cilindrada" value="<?=$vehiculo->getCilindrada()?>">
+                                    
+                                    <label for="incluyeCasco">¿Incluye casco?</label>
+                                    <input type="checkbox" id="incluyeCasco" name="incluyeCasco" <?= $vehiculo->getIncluyeCasco() ? 'checked' : '' ?>>
+                                    <?php endif; ?>
+                                    <br>
+                                    <input type="submit" value="Editar">
+                                </form>
                                 
-                                <label>Matrícula:</label>
-                                <input type="text" name="matricula" value="<?=$vehiculo->getMatricula()?>" required>
-                                
-                                <label>Precio por día:</label>
-                                <input type="number" name="precioDia" step="0.01" value="<?=$vehiculo->getPrecioDia()?>" required>
-                                
-                                <?php if ($vehiculo instanceof Coche): ?>
-                                <label>Número de puertas:</label>
-                                <input type="number" name="numeroPuertas" value="<?=$vehiculo->getNumeroPuertas()?>">
-                                
-                                <label for="tipoCombustible">Tipo de combustible:</label>
-                                <select id="tipoCombustible" name="tipoCombustible" >
-                                    <option value="Diésel" <?= $vehiculo->getTipoCombustible() === 'Diésel' ? 'selected' : '' ?>>Diésel</option>
-                                    <option value="Gasolina" <?= $vehiculo->getTipoCombustible() === 'Gasolina' ? 'selected' : '' ?>>Gasolina</option>
-                                    <option value="Eléctrico" <?= $vehiculo->getTipoCombustible() === 'Eléctrico' ? 'selected' : '' ?>>Eléctrico</option>
-                                    <option value="Híbrido" <?= $vehiculo->getTipoCombustible() === 'Híbrido' ? 'selected' : '' ?>>Híbrido</option>
-                                </select>
-                                <?php endif; ?>
-                                
-                                <?php if ($vehiculo instanceof Motocicleta): ?>
-                                <label>Cilindrada:</label>
-                                <input type="number" name="cilindrada" value="<?=$vehiculo->getCilindrada()?>">
-                                
-                                <label for="incluyeCasco">¿Incluye casco?</label>
-                                <input type="checkbox" id="incluyeCasco" name="incluyeCasco" <?= $vehiculo->getIncluyeCasco() ? 'checked' : '' ?>>
-                                <?php endif; ?>
-                                <br>
-                                <input type="submit" value="Editar">
-                            </form>
-                            
-                            <a href="index.php?accion=eliminar&id=<?=$vehiculo->getId()?>">Eliminar</a>
-                        </td>
+                                <a href="index.php?accion=eliminar&id=<?=$vehiculo->getId()?>">Eliminar</a>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
