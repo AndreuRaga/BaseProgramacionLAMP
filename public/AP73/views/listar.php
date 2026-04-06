@@ -10,6 +10,7 @@
     <h2>Listado de vehículos</h2>
     <a href="index.php?accion=agregar">Agregar vehículo</a>
     <a href="index.php?accion=alta">Registrarse</a>
+    <a href="index.php?accion=login">Iniciar sesión</a>
 
     <div class="container-fluid">
         <table class="table table-striped">

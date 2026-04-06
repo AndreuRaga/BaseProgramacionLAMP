@@ -109,4 +109,20 @@ class GestorPDO extends Connection {
             echo $e->getMessage() . $e->getCode();
         }
     }
+
+    public function buscarUsuarioPorEmail($email) {
+        $sql = "SELECT * FROM Usuario WHERE email = :email LIMIT 1";
+        $stmt = $this->getConn()->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+
+        $value = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        //Si encontró algo, creamos y devolvemos un objeto Usuario
+        if ($value) {
+            return new Usuario($value['email'], $value['password'], $value['id']);
+        }
+        //Si no existe, devolvemos false o null
+        return false;
+    }
 }

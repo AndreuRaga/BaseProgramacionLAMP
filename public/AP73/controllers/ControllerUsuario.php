@@ -26,4 +26,29 @@ class ControllerUsuario {
 
         include 'views/alta.php';
     }
+
+    public function login() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'];
+            $passwordPlana = $_POST['password'];
+
+            //1. Buscamos al usuario (ahora devuelve un objeto Usuario o false)
+            $usuario = $this->gestor->buscarUsuarioPorEmail($email);
+
+            //2. Usamos los Getters del objeto para la validación
+            if ($usuario && password_verify($passwordPlana, $usuario->getPasswordHash())) {
+                //Login correcto
+                session_start();
+                $_SESSION['usuario_id'] = $usuario->getId();
+                $_SESSION['usuario_email'] = $usuario->getEmail();
+                
+                header('Location: index.php');
+                exit();
+            } else {
+                $error = "Credenciales incorrectas";
+            }
+        }
+
+        include 'views/login.php';
+    }
 }
