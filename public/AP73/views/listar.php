@@ -71,6 +71,7 @@
                         <?php if (isset($_SESSION['usuario_id'])): ?>
                             <td>
                                 <a href="index.php?accion=editar&id=<?=$vehiculo->getId()?>">Editar</a>
+                                <br>
                                 <a href="index.php?accion=eliminar&id=<?=$vehiculo->getId()?>">Eliminar</a>
                             </td>
                         <?php endif; ?>
