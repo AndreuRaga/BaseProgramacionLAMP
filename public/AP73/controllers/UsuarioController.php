@@ -1,5 +1,5 @@
 <?php
-class ControllerUsuario {
+class UsuarioController {
     protected $gestor;
 
     public function __construct($gestor) {
@@ -36,9 +36,8 @@ class ControllerUsuario {
             $usuario = $this->gestor->buscarUsuarioPorEmail($email);
 
             //2. Usamos los Getters del objeto para la validación
-            if ($usuario && password_verify($passwordPlana, $usuario->getPasswordHash())) {
+            if ($usuario && password_verify($passwordPlana, $usuario->getPassword())) {
                 //Login correcto
-                session_start();
                 $_SESSION['usuario_id'] = $usuario->getId();
                 $_SESSION['usuario_email'] = $usuario->getEmail();
                 

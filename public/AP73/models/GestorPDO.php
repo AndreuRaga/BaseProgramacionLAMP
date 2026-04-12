@@ -6,6 +6,7 @@ class GestorPDO extends Connection {
         parent::__construct();
     }
 
+    //Gestión de vehículos
     public function listar() {
         $consulta = "SELECT * FROM flotaVehiculos";
         $rtdo = $this->getConn()->query($consulta);
@@ -54,19 +55,26 @@ class GestorPDO extends Connection {
         return $stmt->execute();
     }
 
-    public function eliminar($id) {
-        $consulta = "DELETE FROM flotaVehiculos WHERE id = :id";
-        $stmt = $this->getConn()->prepare($consulta);
-        $stmt->bindValue(':id', $id);
-        return $stmt->execute();
+    public function buscar($id) {
+        $sql = "SELECT * FROM flotaVehiculos WHERE id=$id";
+        $stmt = $this->getConn()->query($sql);
+ 
+        while ($value = $stmt->fetch(PDO::FETCH_ASSOC)){
+            if ($value['tipoVehiculo'] == "Coche"){
+                $vehiculo = new Coche ($value['id'], $value['marca'], $value['modelo'], $value['matricula'], $value['precioDia'], $value['numeroPuertas'], $value['tipoCombustible']);
+            } else {
+                $vehiculo = new Motocicleta ($value['id'], $value['marca'], $value['modelo'], $value['matricula'], $value['precioDia'], $value['cilindrada'], $value['incluyeCasco']);
+            }
+        return $vehiculo;
+        }
     }
 
-    public function editar($id) {
+    public function editar($vehiculo) {
         // Evitar duplicados de matrícula (excluyendo el vehículo actual)
         $consulta = "SELECT COUNT(*) FROM flotaVehiculos WHERE matricula = :matricula AND id != :id";
         $stmt = $this->getConn()->prepare($consulta);
-        $stmt->bindValue(':matricula', $_POST['matricula']);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':matricula', $vehiculo->getMatricula());
+        $stmt->bindValue(':id', $vehiculo->getId());
         $stmt->execute();
         if ($stmt->fetchColumn() > 0) {
             return false;
@@ -74,23 +82,30 @@ class GestorPDO extends Connection {
 
         $consulta = "UPDATE flotaVehiculos SET marca = :marca, modelo = :modelo, matricula = :matricula, precioDia = :precioDia, numeroPuertas = :numeroPuertas, tipoCombustible = :tipoCombustible, cilindrada = :cilindrada, incluyeCasco = :incluyeCasco WHERE id = :id";
         $stmt = $this->getConn()->prepare($consulta);
-        $stmt->bindValue(':id', $id);
-        $stmt->bindValue(':marca', $_POST['marca']);
-        $stmt->bindValue(':modelo', $_POST['modelo']);
-        $stmt->bindValue(':matricula', $_POST['matricula']);
-        $stmt->bindValue(':precioDia', $_POST['precioDia']);
-        $tipoVehiculo = $_POST['tipoVehiculo'];
-        if ($tipoVehiculo === 'Coche') {
-            $stmt->bindValue(':numeroPuertas', $_POST['numeroPuertas']);
-            $stmt->bindValue(':tipoCombustible', $_POST['tipoCombustible']);
+        $stmt->bindValue(':id', $vehiculo->getId());
+        $stmt->bindValue(':marca', $vehiculo->getMarca());
+        $stmt->bindValue(':modelo', $vehiculo->getModelo());
+        $stmt->bindValue(':matricula', $vehiculo->getMatricula());
+        $stmt->bindValue(':precioDia', $vehiculo->getPrecioDia());
+        
+        if ($vehiculo instanceof Coche) {
+            $stmt->bindValue(':numeroPuertas', $vehiculo->getNumeroPuertas());
+            $stmt->bindValue(':tipoCombustible', $vehiculo->getTipoCombustible());
             $stmt->bindValue(':cilindrada', null);
             $stmt->bindValue(':incluyeCasco', null);
         } else {
             $stmt->bindValue(':numeroPuertas', null);
             $stmt->bindValue(':tipoCombustible', null);
-            $stmt->bindValue(':cilindrada', $_POST['cilindrada']);
-            $stmt->bindValue(':incluyeCasco', isset($_POST['incluyeCasco']) ? 1 : 0);
+            $stmt->bindValue(':cilindrada', $vehiculo->getCilindrada());
+            $stmt->bindValue(':incluyeCasco', $vehiculo->getIncluyeCasco());
         }
+        return $stmt->execute();
+    }
+
+    public function eliminar($id) {
+        $consulta = "DELETE FROM flotaVehiculos WHERE id = :id";
+        $stmt = $this->getConn()->prepare($consulta);
+        $stmt->bindValue(':id', $id);
         return $stmt->execute();
     }
 

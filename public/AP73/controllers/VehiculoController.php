@@ -1,6 +1,6 @@
 <?php
 
-class ControllerVehiculo {
+class VehiculoController {
     protected $gestor;
 
     public function __construct($gestor) {
@@ -9,7 +9,6 @@ class ControllerVehiculo {
 
     public function index() {
         $arrayVehiculos = $this->gestor->listar();
-        //var_dump($arrayVehiculos);
         include 'views/listar.php';
     }
 
@@ -53,11 +52,27 @@ class ControllerVehiculo {
     }
 
     public function editar() {
+        $id = $_GET['id'] ?? null;
+        $vehiculo = $this->gestor->buscar($id);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->gestor->editar($_POST['id']);
-            
+            $vehiculo->setMarca($_POST['marca']);
+            $vehiculo->setModelo($_POST['modelo']);
+            $vehiculo->setMatricula($_POST['matricula']);
+            $vehiculo->setPrecioDia($_POST['precioDia']);
+            if ($vehiculo instanceof Coche) {
+                $vehiculo->setNumeroPuertas($_POST['numeroPuertas']);
+                $vehiculo->setTipoCombustible($_POST['tipoCombustible']);
+            } else {
+                $vehiculo->setCilindrada($_POST['cilindrada']);
+                $vehiculo->setIncluyeCasco(isset($_POST['incluyeCasco']) ? 1 : 0);
+            }
+
+            $this->gestor->editar($vehiculo);
+
             header('Location: index.php');
             exit();
         }
+
+        include "views/editar.php";
     }
 }

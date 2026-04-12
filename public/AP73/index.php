@@ -3,22 +3,23 @@
     session_start();
     
     $gestor = new GestorPDO();
-    $controllerVehiculo = new ControllerVehiculo($gestor);
-    $controllerUsuario = new ControllerUsuario($gestor);
+    $vehiculoController = new VehiculoController($gestor);
+    $usuarioController = new UsuarioController($gestor);
 
     $accion = $_GET['accion'] ?? 'index';
 
     switch ($accion) {
         //Gestión de usuarios
         case 'login':
-            $controllerUsuario->login();
+            $usuarioController->login();
             break;
         case 'alta':
-            $controllerUsuario->alta();
+            $usuarioController->alta();
             break;
         case 'logout':
-            $controllerUsuario->logout();
+            $usuarioController->logout();
             break;
+        
         //Gestión de vehículos. Técnica fall-through
         case 'agregar':
         case 'editar':
@@ -28,19 +29,16 @@
                 exit();
             }
             //Si está autenticado, dejamos que ejecute la acción
-            switch ($accion) {
-                case 'agregar':
-                    $controllerVehiculo->agregar();
-                    break;
-                case 'editar':
-                    $controllerVehiculo->editar();
-                    break;
-                case 'eliminar':
-                    $controllerVehiculo->eliminar();
-                    break;
+            if ($accion === 'agregar') {
+                $vehiculoController->agregar();
+            } else if ($accion === 'editar') {
+                $vehiculoController->editar();
+            } else if ($accion === 'eliminar') {
+                $vehiculoController->eliminar();
             }
+            break;
         default:
-            $controllerVehiculo->index();
+            $vehiculoController->index();
             break;
     }
 ?>
