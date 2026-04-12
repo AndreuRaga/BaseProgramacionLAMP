@@ -1,5 +1,6 @@
 <?php
     require_once 'autoload.php';
+    session_start();
     
     $gestor = new GestorPDO();
     $controllerVehiculo = new ControllerVehiculo($gestor);
