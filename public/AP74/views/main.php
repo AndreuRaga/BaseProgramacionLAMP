@@ -16,80 +16,10 @@
     </div>
 
     <?php if (isset($_SESSION['usuario_id'])): ?>
-    <!-- Botón para cambiar el color de fondo (ejemplo de interacción) -->
     <form method="POST" action="index.php?accion=cambiar_fondo">
         <button type="submit">Cambiar fondo</button>
         <input type="color" id="colorPicker" name="colorPicker">
     </form>
     <?php endif; ?>
-
-    <!--
-    <h2>Listado de vehículos</h2>
-    <?php if (isset($_SESSION['usuario_id'])): ?>
-        <a href="index.php?accion=agregar">Agregar vehículo</a>
-    <?php endif; ?>
-
-    <div class="container-fluid">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo de vehículo</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Matrícula</th>
-                    <th>Precio por día</th>
-                    <th>Número de puertas</th>
-                    <th>Tipo de combustible</th>
-                    <th>Cilindrada</th>
-                    <th>¿Incluye casco?</th>
-                    <?php if (isset($_SESSION['usuario_id'])): ?>
-                        <th>Opciones</th>
-                    <?php endif; ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($arrayVehiculos as $vehiculo): ?>
-                    <tr>
-                        <td><?=$vehiculo->getId()?></td>
-                        <?php
-                        if ($vehiculo instanceof Coche) {
-                            echo '<td>' . 'Coche' . '</td>';
-                        } else {
-                            echo '<td>' . 'Motocicleta' . '</td>';
-                        }
-                        echo '<td>' . $vehiculo->getMarca() . '</td>';
-                        echo '<td>' . $vehiculo->getModelo() . '</td>';
-                        echo '<td>' . $vehiculo->getMatricula() . '</td>';
-                        echo '<td>' . $vehiculo->getPrecioDia() . '</td>';
-                        if ($vehiculo instanceof Coche) {
-                            echo '<td>' . $vehiculo->getNumeroPuertas() . '</td>';
-                            echo '<td>' . $vehiculo->getTipoCombustible() . '</td>';
-                        } else {
-                            echo '<td>' . 'N/A' . '</td>';
-                            echo '<td>' . 'N/A' . '</td>';
-                        }
-
-                        if ($vehiculo instanceof Motocicleta) {
-                            echo '<td>' . $vehiculo->getCilindrada() . '</td>';
-                            echo '<td>' . ($vehiculo->getIncluyeCasco() ? 'Sí' : 'No') . '</td>';
-                        } else {
-                            echo '<td>' . 'N/A' . '</td>';
-                            echo '<td>' . 'N/A' . '</td>';
-                        }
-                        ?>
-                        <?php if (isset($_SESSION['usuario_id'])): ?>
-                            <td>
-                                <a href="index.php?accion=editar&id=<?=$vehiculo->getId()?>">Editar</a>
-                                <br>
-                                <a href="index.php?accion=eliminar&id=<?=$vehiculo->getId()?>">Eliminar</a>
-                            </td>
-                        <?php endif; ?>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    -->
 </body>
 </html>

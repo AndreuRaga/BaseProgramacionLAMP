@@ -3,7 +3,7 @@
     session_start();
     
     $gestor = new GestorPDO();
-    // $vehiculoController = new VehiculoController($gestor);
+    
     $usuarioController = new UsuarioController($gestor);
 
     $accion = $_GET['accion'] ?? 'index';
@@ -46,25 +46,6 @@
         case 'cambiar_fondo':
             $usuarioController->cambiarFondo();
             break;
-        /*
-        Gestión de vehículos. Técnica fall-through
-        case 'agregar':
-        case 'editar':
-        case 'eliminar': 
-            if (!isset($_SESSION['usuario_id'])) {
-                header('Location: index.php?accion=login');
-                exit();
-            }
-            //Si está autenticado, dejamos que ejecute la acción
-            if ($accion === 'agregar') {
-                $vehiculoController->agregar();
-            } else if ($accion === 'editar') {
-                $vehiculoController->editar();
-            } else if ($accion === 'eliminar') {
-                $vehiculoController->eliminar();
-            }
-            break;
-        */
         default:
             $usuarioController->index();
             break;
