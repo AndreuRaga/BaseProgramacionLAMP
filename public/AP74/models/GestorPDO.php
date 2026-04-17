@@ -6,6 +6,7 @@ class GestorPDO extends Connection {
         parent::__construct();
     }
 
+    /*
     //Gestión de vehículos
     public function listar() {
         $consulta = "SELECT * FROM flotaVehiculos";
@@ -108,6 +109,7 @@ class GestorPDO extends Connection {
         $stmt->bindValue(':id', $id);
         return $stmt->execute();
     }
+    */
 
     //Gestión de usuarios
     public function registrarUsuario(Usuario $usuario) {

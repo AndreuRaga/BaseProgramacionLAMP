@@ -3,7 +3,7 @@
     session_start();
     
     $gestor = new GestorPDO();
-    $vehiculoController = new VehiculoController($gestor);
+    // $vehiculoController = new VehiculoController($gestor);
     $usuarioController = new UsuarioController($gestor);
 
     $accion = $_GET['accion'] ?? 'index';
@@ -40,7 +40,8 @@
             $usuarioController->logout();
             break;
         
-        //Gestión de vehículos. Técnica fall-through
+        /*
+        Gestión de vehículos. Técnica fall-through
         case 'agregar':
         case 'editar':
         case 'eliminar': 
@@ -57,8 +58,9 @@
                 $vehiculoController->eliminar();
             }
             break;
+        */
         default:
-            $vehiculoController->index();
+            $usuarioController->index();
             break;
     }
 ?>

@@ -6,7 +6,9 @@ class UsuarioController {
         $this->gestor = $gestor;
     }
 
-    
+    public function index() {
+        include 'views/main.php';
+    }
 
     public function alta() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
