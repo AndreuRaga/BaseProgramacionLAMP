@@ -90,4 +90,26 @@ class UsuarioController {
         header('Location: index.php?accion=login');
         exit();
     }
+
+    public function cambiarFondo() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['colorPicker'])) {
+            $colorSeleccionado = $_POST['colorPicker'];
+            $_SESSION['color_fondo'] = $colorSeleccionado;
+
+            // Guardamos el color en una cookie para persistencia a largo plazo
+            setcookie(
+                'color_fondo',
+                base64_encode($colorSeleccionado),
+                [
+                    'expires' => time() + (86400 * 30), // 30 días
+                    'path' => '/',
+                    'httponly' => true,
+                    'samesite' => 'Strict'
+                ]
+            );
+        }
+
+        header('Location: index.php');
+        exit();
+    }
 }
