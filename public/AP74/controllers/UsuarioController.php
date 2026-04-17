@@ -86,6 +86,10 @@ class UsuarioController {
             setcookie('usuario_login', '', time() - 3600000, '/');
         }
 
+        if (isset($_COOKIE['color_fondo'])) {
+            setcookie('color_fondo', '', time() - 3600000, '/');
+        }
+
         //Redirigimos al inicio
         header('Location: index.php?accion=login');
         exit();
