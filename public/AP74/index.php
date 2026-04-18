@@ -21,15 +21,17 @@
         if ($usuario) {
             $_SESSION['usuario_id'] = $usuario->getId();
             $_SESSION['usuario_email'] = $usuario->getEmail();
+            
+            if (isset($_COOKIE['color_fondo'])) {
+                $_SESSION['color_fondo'] = base64_decode($_COOKIE['color_fondo']);
+            }
         } else {
             //Si la cookie es falsa o el usuario ya no existe, borramos la cookie por seguridad
             setcookie('usuario_login', '', time() - 36000, '/');
             setcookie('color_fondo', '', time() - 36000, '/');
         }
     }
-    if (isset($_SESSION['usuario_id']) && isset($_COOKIE['color_fondo'])) {
-        $_SESSION['color_fondo'] = base64_decode($_COOKIE['color_fondo']);
-    }
+    
     //--- FIN DE LÓGICA DE COOKIES ---
 
     switch ($accion) {
