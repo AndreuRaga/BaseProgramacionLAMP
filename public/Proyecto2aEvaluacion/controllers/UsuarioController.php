@@ -1,0 +1,65 @@
+<?php
+class UsuarioController {
+    protected $gestor;
+
+    public function __construct($gestor) {
+        $this->gestor = $gestor;
+    }
+
+    public function alta() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'];
+            $passwordPlana = $_POST['password'];
+
+            //1. Hasheamos la contraseña
+            $passwordHash = password_hash($passwordPlana, PASSWORD_DEFAULT);
+            
+            //2. Creamos el objeto Usuario (sin ID, porque es nuevo)
+            $nuevoUsuario = new Usuario($email, $passwordHash);
+
+            //3. Pasamos el objeto al gestor
+            $this->gestor->registrarUsuario($nuevoUsuario);
+            
+            header('Location: index.php?accion=login');
+            exit();
+        }
+
+        include 'views/alta.php';
+    }
+
+    public function login() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'];
+            $passwordPlana = $_POST['password'];
+
+            //1. Buscamos al usuario (ahora devuelve un objeto Usuario o false)
+            $usuario = $this->gestor->buscarUsuarioPorEmail($email);
+
+            //2. Usamos los Getters del objeto para la validación
+            if ($usuario && password_verify($passwordPlana, $usuario->getPassword())) {
+                //Login correcto
+                $_SESSION['usuario_id'] = $usuario->getId();
+                $_SESSION['usuario_email'] = $usuario->getEmail();
+                
+                header('Location: index.php');
+                exit();
+            } else {
+                $error = "Credenciales incorrectas";
+            }
+        }
+
+        include 'views/login.php';
+    }
+
+    public function logout() {
+        //Vaciamos las variables de sesión
+        $_SESSION = [];
+
+        //Destruimos la sesión completamente
+        session_destroy();
+
+        //Redirigimos al inicio
+        header('Location: index.php?accion=login');
+        exit();
+    }
+}
